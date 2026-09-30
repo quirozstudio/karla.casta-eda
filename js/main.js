@@ -26,10 +26,16 @@ setHref("btnIg", IG_URL);
 
 // WhatsApp por categoría
 const waMasajes = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
-  "Hola Karla, quiero reservar un masaje. ¿Qué disponibilidad tienes?"
+  "Hola Karla, quiero reservar un masaje o consultar los bonos personalizados. ¿Qué opciones tienes?"
 )}`;
 const waMadero = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
-  "Hola Karla, quiero información sobre maderoterapia (1/3/6 sesiones). ¿Qué me recomiendas?"
+  "Hola Karla, quiero información sobre el bono de 5 sesiones de maderoterapia y los bonos personalizados. ¿Qué me recomiendas?"
+)}`;
+const waDrenajeCorporal = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
+  "Hola Karla, quiero información sobre el drenaje linfático brasileño corporal y la promoción de este mes."
+)}`;
+const waDrenajeFacial = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
+  "Hola Karla, quiero información sobre el drenaje facial y el precio de lanzamiento para las primeras clientas."
 )}`;
 const waHolistico = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
   "Hola Karla, quiero reservar un ritual holístico. ¿Qué disponibilidad tienes?"
@@ -41,6 +47,8 @@ const waBelleza = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
 setHref("waMasajes", waMasajes);
 setHref("waHolistico", waHolistico);
 setHref("waMadero", waMadero);
+setHref("waDrenajeCorporal", waDrenajeCorporal);
+setHref("waDrenajeFacial", waDrenajeFacial);
 setHref("waBelleza", waBelleza);
 
 // Año en footer
@@ -52,7 +60,7 @@ const MAPS_URL =
   encodeURIComponent("C/ Bidemokarte 1, Huarte, Peluquería Ilea");
 setHref("btnMaps", MAPS_URL);
 
-// ==== Intro de marca + oferta flash ====
+// ==== Intro de marca + tarjeta regalo destacada ====
 const intro = $id("brandIntro");
 const introSkip = $id("introSkip");
 const offerTeaser = $id("offerTeaser");
@@ -62,12 +70,13 @@ const offerWhatsapp = $id("offerWhatsapp");
 let lastOfferTrigger = null;
 let teaserTimer = null;
 
-const offerText = encodeURIComponent(
-  "Hola Karla, he visto la oferta flash de 5 sesiones de maderoterapia por 199 €. ¿Tienes disponibilidad?"
+const giftText = encodeURIComponent(
+  "Hola Karla, quiero preparar una tarjeta regalo. Me gustaría elegir un servicio o un importe. ¿Me ayudas?"
 );
 if (offerWhatsapp) {
-  offerWhatsapp.href = `https://wa.me/${PHONE_E164}?text=${offerText}`;
+  offerWhatsapp.href = `https://wa.me/${PHONE_E164}?text=${giftText}`;
 }
+setHref("waGiftSection", `https://wa.me/${PHONE_E164}?text=${giftText}`);
 
 const finishIntro = () => {
   if (!intro || intro.classList.contains("isLeaving")) return;
@@ -194,8 +203,8 @@ const data = {
     img: "img/reductores.jpg",
     alt: "Tratamientos reductores y maderoterapia",
     items: [
-      "Drenaje linfático y circulatorio",
-      "Masaje anticelulítico y drenaje brasileño",
+      "Drenaje linfático brasileño corporal",
+      "Drenaje facial",
       "Maderoterapia moldeadora",
     ],
     note: "Enfoque en circulación, textura y definición. Ideal con plan de sesiones.",

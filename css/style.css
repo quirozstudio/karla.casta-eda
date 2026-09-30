@@ -911,6 +911,15 @@
       width: 100%;
       margin-top: 14px;
     }
+    .pricePromo{
+      margin: 8px -8px 0;
+      padding: 12px 8px;
+      border-radius: 12px;
+      border-bottom: 0;
+      background: linear-gradient(135deg, rgba(168,111,76,.14), rgba(201,164,127,.22));
+    }
+    .pricePromo span{ color: var(--deep, #2b1c17); font-weight: 800; }
+    .pricePromo b{ color: #8b4f35; font-size: 18px; }
     .flyerPreview{
       margin-top: 18px;
       border-radius: var(--r);
@@ -1011,11 +1020,16 @@
     margin-top: 14px;
   }
 
-  .priceBtn{
+    .priceBtn{
     margin-top: 18px;
     padding: 14px;
     font-size: 15px;
-  }
+    }
+
+    .giftSection{ padding-top: clamp(55px, 7vw, 90px); }
+    .giftCard{ border-color: rgba(168,111,76,.3); }
+    .giftCard h2{ margin: 14px 0 12px; font-family: Georgia, serif; font-size: clamp(34px, 4.4vw, 58px); line-height: 1; }
+    .giftImage img{ object-position: center; }
 }
 
 /* ===== PALETA CALIDA INSPIRADA EN EL ESPACIO DE KARLA ===== */
