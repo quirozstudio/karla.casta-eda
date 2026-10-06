@@ -189,7 +189,7 @@ const data = {
     alt: "Cabina de masajes y bienestar de Karla Castañeda en Huarte",
     items: [
       "Masaje relajante con aceites esenciales",
-      "Masaje facial japonés",
+      "Masaje facial japonés KOBIDO",
       "Masaje cráneo-facial",
       "Masaje descontracturante",
       "Masaje para piernas cansadas",
