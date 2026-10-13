@@ -40,12 +40,16 @@ const waDrenajeFacial = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
 const waHolistico = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
   "Hola Karla, quiero reservar un ritual holístico. ¿Qué disponibilidad tienes?"
 )}`;
+const waAutumnOffer = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
+  "Hola Karla, quiero reservar la oferta especial de otoño de masaje con piedras calientes por 45 €. ¿Qué disponibilidad tienes?"
+)}`;
 const waBelleza = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
   "Hola Karla, quiero reservar un servicio de belleza (semipermanente / lifting). ¿Disponibilidad?"
 )}`;
 
 setHref("waMasajes", waMasajes);
 setHref("waHolistico", waHolistico);
+setHref("waAutumnOffer", waAutumnOffer);
 setHref("waMadero", waMadero);
 setHref("waDrenajeCorporal", waDrenajeCorporal);
 setHref("waDrenajeFacial", waDrenajeFacial);
