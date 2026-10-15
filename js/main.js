@@ -29,7 +29,7 @@ const waMasajes = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
   "Hola Karla, quiero reservar un masaje o consultar los bonos personalizados. ¿Qué opciones tienes?"
 )}`;
 const waMadero = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
-  "Hola Karla, quiero información sobre el bono de 5 sesiones de maderoterapia y los bonos personalizados. ¿Qué me recomiendas?"
+  "Hola Karla, quiero información sobre la sesión individual de maderoterapia por 50 €, el bono de 5 sesiones y los bonos personalizados. ¿Qué me recomiendas?"
 )}`;
 const waDrenajeCorporal = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
   "Hola Karla, quiero información sobre el drenaje linfático brasileño corporal y la promoción de este mes."
