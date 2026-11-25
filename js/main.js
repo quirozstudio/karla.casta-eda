@@ -40,8 +40,8 @@ const waDrenajeFacial = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
 const waHolistico = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
   "Hola Karla, quiero reservar un ritual holístico. ¿Qué disponibilidad tienes?"
 )}`;
-const waAutumnOffer = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
-  "Hola Karla, quiero reservar la oferta especial de otoño de masaje con piedras calientes por 45 €. ¿Qué disponibilidad tienes?"
+const waBlackFriday = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
+  "Hola Karla, quiero comprar una tarjeta regalo Black Friday con un 15% de descuento. Me interesa consultar las opciones disponibles."
 )}`;
 const waBelleza = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
   "Hola Karla, quiero reservar un servicio de belleza (semipermanente / lifting). ¿Disponibilidad?"
@@ -49,7 +49,7 @@ const waBelleza = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(
 
 setHref("waMasajes", waMasajes);
 setHref("waHolistico", waHolistico);
-setHref("waAutumnOffer", waAutumnOffer);
+setHref("waBlackFriday", waBlackFriday);
 setHref("waMadero", waMadero);
 setHref("waDrenajeCorporal", waDrenajeCorporal);
 setHref("waDrenajeFacial", waDrenajeFacial);
@@ -64,23 +64,98 @@ const MAPS_URL =
   encodeURIComponent("C/ Bidemokarte 1, Huarte, Peluquería Ilea");
 setHref("btnMaps", MAPS_URL);
 
-// ==== Intro de marca + tarjeta regalo destacada ====
+// ==== Black Friday + tarjeta regalo destacada ====
 const intro = $id("brandIntro");
 const introSkip = $id("introSkip");
 const offerTeaser = $id("offerTeaser");
 const flashOffer = $id("flashOffer");
 const offerDialog = $id("offerDialog");
 const offerWhatsapp = $id("offerWhatsapp");
+const blackFridayCard = document.querySelector(".blackFridayCard");
+const blackFridayCountdownParts = blackFridayCard?.querySelectorAll("[data-countdown-part]");
+const blackFridayCountdownLabel = blackFridayCard?.querySelector("[data-countdown-label]");
+const blackFridayCountdownStatus = blackFridayCard?.querySelector("[data-countdown-status]");
+const flashOfferCountdown = $id("flashOfferCountdown");
+const modalCountdown = $id("offerDialog")?.querySelector("[data-modal-countdown]");
+const modalCountdownLabel = $id("offerDialog")?.querySelector("[data-modal-countdown-label]");
+const blackFridayPurchaseOnly = document.querySelectorAll("[data-purchase-only]");
+const blackFridayButton = $id("waBlackFriday");
+const BLACK_FRIDAY_PURCHASE_DEADLINE = new Date(blackFridayCard?.dataset.purchaseDeadline || "2026-12-08T23:59:59+01:00");
+const BLACK_FRIDAY_BOOKING_DEADLINE = new Date(blackFridayCard?.dataset.bookingDeadline || "2027-01-30T23:59:59+01:00");
 let lastOfferTrigger = null;
 let teaserTimer = null;
 
 const giftText = encodeURIComponent(
   "Hola Karla, quiero preparar una tarjeta regalo. Me gustaría elegir un servicio o un importe. ¿Me ayudas?"
 );
-if (offerWhatsapp) {
-  offerWhatsapp.href = `https://wa.me/${PHONE_E164}?text=${giftText}`;
-}
 setHref("waGiftSection", `https://wa.me/${PHONE_E164}?text=${giftText}`);
+
+const formatCountdown = (milliseconds) => {
+  const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return { days, hours, minutes, seconds };
+};
+
+const compactCountdown = ({ days, hours, minutes }) =>
+  days > 0 ? `${days}d ${String(hours).padStart(2, "0")}h` : `${hours}h ${String(minutes).padStart(2, "0")}m`;
+
+const blackFridayMessage = (service = "una tarjeta regalo", price = "") =>
+  `Hola Karla, quiero comprar ${service} de Black Friday${price ? ` por ${price}` : ""}. ¿Cómo puedo adquirir la tarjeta digital?`;
+
+const setBlackFridayHref = (element, service, price) => {
+  if (!element) return;
+  element.href = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(blackFridayMessage(service, price))}`;
+};
+
+setBlackFridayHref(offerWhatsapp);
+document.querySelectorAll(".blackFridayOfferItem").forEach((item) => {
+  setBlackFridayHref(item, item.dataset.bfService, item.dataset.bfPrice);
+});
+
+const updateBlackFridayCountdown = () => {
+  const now = new Date();
+  const purchaseOpen = now <= BLACK_FRIDAY_PURCHASE_DEADLINE;
+  const bookingOpen = now <= BLACK_FRIDAY_BOOKING_DEADLINE;
+  const target = purchaseOpen ? BLACK_FRIDAY_PURCHASE_DEADLINE : BLACK_FRIDAY_BOOKING_DEADLINE;
+  const remaining = formatCountdown(target - now);
+  const stateLabel = purchaseOpen ? "La oferta termina en" : bookingOpen ? "Puedes reservar hasta" : "Campaña finalizada";
+  const stateStatus = purchaseOpen
+    ? "Compra hasta el 8 de diciembre · Reserva hasta el 30 de enero."
+    : bookingOpen
+      ? "La compra terminó el 8 de diciembre. Si ya tienes tu tarjeta, puedes agendar hasta el 30 de enero."
+      : "La campaña Black Friday ha terminado.";
+
+  blackFridayCountdownLabel?.replaceChildren(stateLabel);
+  blackFridayCountdownStatus?.replaceChildren(stateStatus);
+  blackFridayCountdownParts?.forEach((part) => {
+    part.textContent = String(remaining[part.dataset.countdownPart]).padStart(2, "0");
+  });
+  if (flashOfferCountdown) {
+    flashOfferCountdown.textContent = purchaseOpen ? `quedan ${compactCountdown(remaining)}` : bookingOpen ? "reserva abierta" : "finalizada";
+  }
+  if (modalCountdown) modalCountdown.textContent = purchaseOpen ? compactCountdown(remaining) : bookingOpen ? "reserva abierta" : "finalizada";
+  if (modalCountdownLabel) modalCountdownLabel.textContent = stateLabel;
+  blackFridayPurchaseOnly.forEach((element) => { element.hidden = !purchaseOpen; });
+  if (offerWhatsapp) {
+    offerWhatsapp.hidden = !bookingOpen;
+    if (purchaseOpen) {
+      setBlackFridayHref(offerWhatsapp);
+      offerWhatsapp.textContent = "Quiero una tarjeta regalo →";
+    } else {
+      setBlackFridayHref(offerWhatsapp, "consultar una reserva Black Friday");
+      offerWhatsapp.textContent = "Consultar mi reserva →";
+    }
+  }
+  if (blackFridayButton && !purchaseOpen) blackFridayButton.hidden = true;
+  flashOffer?.classList.toggle("isExpired", !bookingOpen);
+  blackFridayCard?.classList.toggle("isExpired", !bookingOpen);
+};
+
+updateBlackFridayCountdown();
+window.setInterval(updateBlackFridayCountdown, 1000);
 
 const finishIntro = () => {
   if (!intro || intro.classList.contains("isLeaving")) return;
@@ -102,6 +177,7 @@ const collapseOfferTeaser = () => {
 };
 
 const showOfferTeaser = () => {
+  if (new Date() > BLACK_FRIDAY_BOOKING_DEADLINE) return;
   if (!offerTeaser) {
     flashOffer?.classList.add("isVisible");
     return;
